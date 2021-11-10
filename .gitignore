@@ -24,3 +24,5 @@ yarn-error.log
 .idea/
 /tools
 /tools/
+/resources/users.log
+users.log
