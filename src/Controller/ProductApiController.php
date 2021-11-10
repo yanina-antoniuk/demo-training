@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Controller;
 
 use App\Factory\UserAgentFactory;
@@ -17,13 +26,6 @@ class ProductApiController extends AbstractController
 {
     /**
      * @Route("/api", name="api", methods={"GET"}, requirements={"info":"info"})
-     *
-     * @param ProductHandler $productHandler
-     * @param CsvParser $csvParser
-     * @param Request $request
-     * @param RequestValidator $requestValidator
-     *
-     * @return Response
      */
     public function index(
         ProductHandler $productHandler,
@@ -36,7 +38,7 @@ class ProductApiController extends AbstractController
         $parsedProducts = $csvParser->getParsedProducts();
 
         $absolutePath = rtrim($request->server->get('SYMFONY_DEFAULT_ROUTE_URL'), '/')
-            . $request->server->get('REQUEST_URI');
+            .$request->server->get('REQUEST_URI');
 
         return new JsonResponse(
             $productHandler->getProductsLinksList($parsedProducts, $absolutePath),
@@ -47,13 +49,6 @@ class ProductApiController extends AbstractController
 
     /**
      * @Route("/api/info", name="api_info", requirements={"info":"info"}, methods={"GET"})
-     *
-     * @param Request $request
-     * @param UserAgentFactory $factory
-     * @param UserAgentInfoHandler $handler
-     * @param RequestValidator $requestValidator
-     *
-     * @return Response
      */
     public function info(
         Request $request,
@@ -69,9 +64,9 @@ class ProductApiController extends AbstractController
             'browser' => $request->server->get('HTTP_SEC_CH_UA'),
         ];
 
-       $userAgent = $factory->create($arguments);
+        $userAgent = $factory->create($arguments);
 
-       $handler->writeUserAgentInfo($userAgent);
+        $handler->writeUserAgentInfo($userAgent);
 
         return new JsonResponse(
             'This is info',
@@ -82,14 +77,6 @@ class ProductApiController extends AbstractController
 
     /**
      * @Route("/api/{slug}", name="api_product_show", defaults={"_format": "json"}, methods={"GET"})
-     *
-     * @param string $slug
-     * @param ProductHandler $productHandler
-     * @param CsvParser $csvParser
-     * @param Request $request
-     * @param RequestValidator $requestValidator
-     *
-     * @return Response
      */
     public function show(
         string $slug,

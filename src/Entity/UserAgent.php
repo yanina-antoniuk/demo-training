@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Entity;
 
 class UserAgent
@@ -19,11 +28,6 @@ class UserAgent
      */
     private $browser;
 
-    /**
-     * @param string $ip
-     * @param string $language
-     * @param string $browser
-     */
     public function __construct(string $ip, string $language, string $browser)
     {
         $this->ip = $ip;
@@ -31,31 +35,22 @@ class UserAgent
         $this->browser = $browser;
     }
 
-    /**
-     * @return string
-     */
-    public function getIp() : string
+    public function getIp(): string
     {
         return $this->ip;
     }
 
-    /**
-     * @return string
-     */
-    public function getLanguage() : string
+    public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @return string
-     */
-    public function getBrowser() : string
+    public function getBrowser(): string
     {
         return $this->browser;
     }
 
-    public function getWriteInfo() : string
+    public function getWriteInfo(): string
     {
         return json_encode([
             'ip' => $this->ip,
