@@ -16,9 +16,6 @@ use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 class RequestValidator
 {
-    /**
-     * @param Request $request
-     */
     public function validateContentType(Request $request): void
     {
         if ('application/json' !== $request->server->get('CONTENT_TYPE')) {

@@ -15,12 +15,7 @@ use App\Entity\ProductInterface;
 
 class ProductInfoService
 {
-    /**
-     * @param array $products
-     * @param string $absolutePath
-     * @return array
-     */
-    public function getProductsLinksList(array $products,string $absolutePath): array
+    public function getProductsLinksList(array $products, string $absolutePath): array
     {
         $links = [];
 
@@ -33,11 +28,6 @@ class ProductInfoService
         return $links;
     }
 
-    /**
-     * @param string $productSku
-     * @param array $products
-     * @return object|null
-     */
     public function getProductInfo(string $productSku, array $products): ?object
     {
         foreach ($products as $product) {

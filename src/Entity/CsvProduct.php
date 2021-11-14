@@ -13,19 +13,10 @@ namespace App\Entity;
 
 class CsvProduct implements ProductInterface
 {
-    /**
-     * @var string
-     */
     private string $sku;
 
-    /**
-     * @var string
-     */
     private string $name;
 
-    /**
-     * @var string
-     */
     private string $description;
 
     public function __construct(string $sku, string $name, string $description)

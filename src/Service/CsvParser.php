@@ -16,25 +16,14 @@ use Symfony\Component\Finder\Finder;
 
 class CsvParser
 {
-    /**
-     * @var string
-     */
     private string $productsFileDir;
 
-    /**
-     * @var string
-     */
     private string $productsFileName;
 
     private const FILE_EXT = '.csv';
-    /**
-     * @var Finder
-     */
+
     private Finder $finder;
 
-    /**
-     * @var ProductFactory
-     */
     private ProductFactory $productFactory;
 
     public function __construct(

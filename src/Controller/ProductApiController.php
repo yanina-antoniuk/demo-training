@@ -29,9 +29,9 @@ class ProductApiController extends AbstractController
      */
     public function index(
         ProductInfoService $productHandler,
-        CsvParser          $csvParser,
-        Request            $request,
-        RequestValidator   $requestValidator
+        CsvParser $csvParser,
+        Request $request,
+        RequestValidator $requestValidator
     ): Response {
         $requestValidator->validateContentType($request);
 
@@ -77,11 +77,11 @@ class ProductApiController extends AbstractController
      * @Route("/api/{slug}", name="api_product_show", defaults={"_format": "json"}, methods={"GET"})
      */
     public function show(
-        string             $slug,
+        string $slug,
         ProductInfoService $productHandler,
-        CsvParser          $csvParser,
-        Request            $request,
-        RequestValidator   $requestValidator
+        CsvParser $csvParser,
+        Request $request,
+        RequestValidator $requestValidator
     ): Response {
         $requestValidator->validateContentType($request);
 

@@ -16,12 +16,6 @@ use App\Entity\ProductInterface;
 
 class ProductFactory
 {
-    /**
-     * @param string $sku
-     * @param string $name
-     * @param string $description
-     * @return ProductInterface
-     */
     public function create(string $sku, string $name, string $description): ProductInterface
     {
         return new CsvProduct($sku, $name, $description);
