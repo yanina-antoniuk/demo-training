@@ -13,13 +13,14 @@ namespace App\Service;
 
 use App\Entity\ProductInterface;
 
-class ProductHandler
+class ProductInfoService
 {
     /**
-     * @param $products
-     * @param $absolutePath
+     * @param array $products
+     * @param string $absolutePath
+     * @return array
      */
-    public function getProductsLinksList($products, $absolutePath): array
+    public function getProductsLinksList(array $products,string $absolutePath): array
     {
         $links = [];
 
@@ -32,9 +33,14 @@ class ProductHandler
         return $links;
     }
 
-    public function getProductInfo(string $productSku, array $productArray): ?object
+    /**
+     * @param string $productSku
+     * @param array $products
+     * @return object|null
+     */
+    public function getProductInfo(string $productSku, array $products): ?object
     {
-        foreach ($productArray as $product) {
+        foreach ($products as $product) {
             /* @var ProductInterface */
             if ($product->getSku() === $productSku) {
                 return json_decode(json_encode($product->serialize()));

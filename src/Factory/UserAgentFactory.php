@@ -15,8 +15,14 @@ use App\Entity\UserAgent;
 
 class UserAgentFactory
 {
-    public function create(array $arguments): UserAgent
+    /**
+     * @param string $ip
+     * @param string $language
+     * @param string $browser
+     * @return UserAgent
+     */
+    public function create(string $ip, string  $language, string $browser): UserAgent
     {
-        return new UserAgent($arguments['ip'], $arguments['language'], $arguments['browser']);
+        return new UserAgent($ip, $language, $browser);
     }
 }

@@ -11,6 +11,7 @@ parameters:
     products_file_dir: '../resources/'
     products_file_name: 'products'
     user_file_name: 'users.log'
+    user_file_dir: '../var/log/'
 
 services:
     # default configuration for services in *this* file
@@ -24,6 +25,7 @@ services:
             string $productsFileDir: '%products_file_dir%'
             string $productsFileName: '%products_file_name%'
             string $userFileName: '%user_file_name%'
+            string $userFileDir: '%user_file_dir%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

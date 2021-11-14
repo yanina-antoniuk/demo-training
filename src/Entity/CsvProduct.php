@@ -16,17 +16,17 @@ class CsvProduct implements ProductInterface
     /**
      * @var string
      */
-    private $sku;
+    private string $sku;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var string
      */
-    private $description;
+    private string $description;
 
     public function __construct(string $sku, string $name, string $description)
     {

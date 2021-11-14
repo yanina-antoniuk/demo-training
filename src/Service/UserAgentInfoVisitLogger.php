@@ -14,12 +14,12 @@ namespace App\Service;
 use App\Entity\UserAgent;
 use Symfony\Component\Finder\Finder;
 
-class UserAgentInfoHandler
+class UserAgentInfoVisitLogger
 {
     /**
      * @var string
      */
-    private $productsFileDir;
+    private $userFileDir;
 
     /**
      * @var string
@@ -32,18 +32,18 @@ class UserAgentInfoHandler
     private $finder;
 
     public function __construct(
-        string $productsFileDir,
+        string $userFileDir,
         string $userFileName,
         Finder $finder
     ) {
-        $this->productsFileDir = $productsFileDir;
+        $this->userFileDir = $userFileDir;
         $this->userFileName = $userFileName;
         $this->finder = $finder;
     }
 
     public function writeUserAgentInfo(UserAgent $agent): void
     {
-        $files = $this->finder->in($this->productsFileDir);
+        $files = $this->finder->in($this->userFileDir);
 
         foreach ($files as $file) {
             if ($file->getFilename() === $this->userFileName) {

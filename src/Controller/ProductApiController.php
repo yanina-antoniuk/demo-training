@@ -13,8 +13,8 @@ namespace App\Controller;
 
 use App\Factory\UserAgentFactory;
 use App\Service\CsvParser;
-use App\Service\ProductHandler;
-use App\Service\UserAgentInfoHandler;
+use App\Service\ProductInfoService;
+use App\Service\UserAgentInfoVisitLogger;
 use App\Utils\RequestValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,13 +25,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductApiController extends AbstractController
 {
     /**
-     * @Route("/api", name="api", methods={"GET"}, requirements={"info":"info"})
+     * @Route("/api", name="api", methods={"GET"})
      */
     public function index(
-        ProductHandler $productHandler,
-        CsvParser $csvParser,
-        Request $request,
-        RequestValidator $requestValidator
+        ProductInfoService $productHandler,
+        CsvParser          $csvParser,
+        Request            $request,
+        RequestValidator   $requestValidator
     ): Response {
         $requestValidator->validateContentType($request);
 
@@ -48,23 +48,21 @@ class ProductApiController extends AbstractController
     }
 
     /**
-     * @Route("/api/info", name="api_info", requirements={"info":"info"}, methods={"GET"})
+     * @Route("/api/info", name="api_info", methods={"GET"})
      */
     public function info(
         Request $request,
         UserAgentFactory $factory,
-        UserAgentInfoHandler $handler,
+        UserAgentInfoVisitLogger $handler,
         RequestValidator $requestValidator
     ): Response {
         $requestValidator->validateContentType($request);
 
-        $arguments = [
-            'ip' => $request->getClientIp(),
-            'language' => $request->getPreferredLanguage(),
-            'browser' => $request->server->get('HTTP_SEC_CH_UA'),
-        ];
-
-        $userAgent = $factory->create($arguments);
+        $userAgent = $factory->create(
+            $request->getClientIp(),
+            $request->getPreferredLanguage(),
+            $request->server->get('HTTP_SEC_CH_UA')
+        );
 
         $handler->writeUserAgentInfo($userAgent);
 
@@ -79,11 +77,11 @@ class ProductApiController extends AbstractController
      * @Route("/api/{slug}", name="api_product_show", defaults={"_format": "json"}, methods={"GET"})
      */
     public function show(
-        string $slug,
-        ProductHandler $productHandler,
-        CsvParser $csvParser,
-        Request $request,
-        RequestValidator $requestValidator
+        string             $slug,
+        ProductInfoService $productHandler,
+        CsvParser          $csvParser,
+        Request            $request,
+        RequestValidator   $requestValidator
     ): Response {
         $requestValidator->validateContentType($request);
 

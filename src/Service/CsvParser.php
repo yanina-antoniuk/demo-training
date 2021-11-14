@@ -16,17 +16,26 @@ use Symfony\Component\Finder\Finder;
 
 class CsvParser
 {
-    private $productsFileDir;
-    private $productsFileName;
+    /**
+     * @var string
+     */
+    private string $productsFileDir;
+
+    /**
+     * @var string
+     */
+    private string $productsFileName;
+
     private const FILE_EXT = '.csv';
     /**
      * @var Finder
      */
-    private $finder;
+    private Finder $finder;
+
     /**
      * @var ProductFactory
      */
-    private $productFactory;
+    private ProductFactory $productFactory;
 
     public function __construct(
         string $productsFileDir,
@@ -58,7 +67,8 @@ class CsvParser
 
         foreach ($csvStrings as $string) {
             if ($string) {
-                $products[] = $this->productFactory->create(str_getcsv($string));
+                $data = str_getcsv($string);
+                $products[] = $this->productFactory->create($data[0], $data[1], $data[2]);
             }
         }
 
