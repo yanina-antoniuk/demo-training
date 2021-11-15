@@ -44,6 +44,9 @@ services:
 
     Symfony\Component\Finder\Finder:
 
+    App\EventListener\ApiContentTypeListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, priority: 33}
 when@test:
     services:
         test.user_password_hasher:

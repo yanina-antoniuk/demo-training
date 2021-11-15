@@ -28,12 +28,12 @@ class ProductInfoService
         return $links;
     }
 
-    public function getProductInfo(string $productSku, array $products): ?object
+    public function getProductInfo(string $productSku, array $products)
     {
         foreach ($products as $product) {
             /* @var ProductInterface */
             if ($product->getSku() === $productSku) {
-                return json_decode(json_encode($product->serialize()));
+                return $product->serialize();
             }
         }
 

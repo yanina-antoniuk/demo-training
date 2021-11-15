@@ -15,12 +15,12 @@ use App\Factory\UserAgentFactory;
 use App\Service\CsvParser;
 use App\Service\ProductInfoService;
 use App\Service\UserAgentInfoVisitLogger;
-use App\Utils\RequestValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProductApiController extends AbstractController
 {
@@ -30,10 +30,8 @@ class ProductApiController extends AbstractController
     public function index(
         ProductInfoService $productHandler,
         CsvParser $csvParser,
-        Request $request,
-        RequestValidator $requestValidator
+        Request $request
     ): Response {
-        $requestValidator->validateContentType($request);
 
         $parsedProducts = $csvParser->getParsedProducts();
 
@@ -53,11 +51,8 @@ class ProductApiController extends AbstractController
     public function info(
         Request $request,
         UserAgentFactory $factory,
-        UserAgentInfoVisitLogger $handler,
-        RequestValidator $requestValidator
+        UserAgentInfoVisitLogger $handler
     ): Response {
-        $requestValidator->validateContentType($request);
-
         $userAgent = $factory->create(
             $request->getClientIp(),
             $request->getPreferredLanguage(),
@@ -80,17 +75,22 @@ class ProductApiController extends AbstractController
         string $slug,
         ProductInfoService $productHandler,
         CsvParser $csvParser,
-        Request $request,
-        RequestValidator $requestValidator
+        TranslatorInterface $translator
     ): Response {
-        $requestValidator->validateContentType($request);
-
         $parsedProducts = $csvParser->getParsedProducts();
+        $product = $productHandler->getProductInfo($slug, $parsedProducts);
+        $productTranslated = [];
+
+        foreach ($product as $key => $value) {
+            $translatedKey = $translator->trans($key);
+            $productTranslated[$translatedKey] = $value;
+        }
 
         return new JsonResponse(
-            $productHandler->getProductInfo($slug, $parsedProducts),
+            json_encode($productTranslated, 256),
             Response::HTTP_OK,
-            ['Content-Type: application/json']
+            ['Content-Type: application/json'],
+            true
         );
     }
 }
