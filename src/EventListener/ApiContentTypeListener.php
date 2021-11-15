@@ -9,12 +9,13 @@ final class ApiContentTypeListener
 {
     public function onKernelRequest(RequestEvent $event)
     {
-        preg_match('/\b(api)\b/', $event->getRequest()->server->get('REQUEST_URI'), $matches);
+        $uri = $event->getRequest()->server->get('REQUEST_URI');
+        preg_match('/\b(api)\b/', $uri, $matches);
 
         if (
             !empty($matches)
             && $event->getRequest()->server->get('HTTP_CONTENT_TYPE') !== 'application/json'
-            && $event->getRequest()->server->get('REQUEST_METHOD') == 'GET'
+            && !strpos($uri, 'config')
         ) {
             throw new UnsupportedMediaTypeHttpException();
         }
