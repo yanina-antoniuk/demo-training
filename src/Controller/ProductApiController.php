@@ -11,8 +11,13 @@
 
 namespace App\Controller;
 
+use App\Command\SendNotificationCommand;
+use App\Factory\NotificationFactory;
 use App\Factory\UserAgentFactory;
 use App\Service\CsvParser;
+use App\Service\Notification\EmailNotificationChannel;
+use App\Service\Notification\FileLoggerNotificationChannel;
+use App\Service\Notification\TelegramNotificationChannel;
 use App\Service\ProductInfoService;
 use App\Service\UserAgentInfoVisitLogger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,6 +94,38 @@ class ProductApiController extends AbstractController
         return new JsonResponse(
             json_encode($productTranslated, 256),
             Response::HTTP_OK,
+            ['Content-Type: application/json'],
+            true
+        );
+    }
+
+    /**
+     * @Route("/api/notify", name="api_notify", defaults={"_format": "json"}, methods={"POST"})
+     */
+    public function notify(
+        Request $request,
+        NotificationFactory $notificationFactory,
+        SendNotificationCommand $notificationCommand
+    ): Response {
+        try {
+            $data = $request->toArray();
+
+            $notification = $notificationFactory->create(
+                $data['recipient'],
+                $data['message'],
+                $data['channel']
+            );
+
+            $notificationCommand->send($notification);
+
+            $result = true;
+        } catch (\Throwable $exception) {
+            $result = false;
+        }
+
+        return new JsonResponse(
+            $result ? 'Sent!' : 'Failed to send!',
+            $result ? Response::HTTP_OK : Response::HTTP_BAD_REQUEST,
             ['Content-Type: application/json'],
             true
         );

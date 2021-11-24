@@ -12,6 +12,9 @@ parameters:
     products_file_name: 'products'
     user_file_name: 'users.log'
     user_file_dir: '../var/log/'
+    telegram_api_key: '%env(string:TELEGRAM_TOKEN)%'
+    telegram_send_message_uri: 'https://api.telegram.org/bot%s/sendMessage'
+    telegram_chat_id: '%env(string:TELEGRAM_CHAT_ID)%'
 
 services:
     # default configuration for services in *this* file
@@ -26,6 +29,9 @@ services:
             string $productsFileName: '%products_file_name%'
             string $userFileName: '%user_file_name%'
             string $userFileDir: '%user_file_dir%'
+            string $telegramApiKey: '%telegram_api_key%'
+            string $telegramSendMessageUri: '%telegram_send_message_uri%'
+            string $telegramChatIdentifier: '%telegram_chat_id%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -47,6 +53,37 @@ services:
     App\EventListener\ApiContentTypeListener:
         tags:
             - {name: kernel.event_listener, event: kernel.request, priority: 33}
+
+    App\Service\Notification\TelegramNotificationChannel:
+        arguments:
+            - '%telegram_api_key%'
+            - '%telegram_send_message_uri%'
+            - '%telegram_chat_id%'
+        tags:
+            - { name: 'app.handler', key: 'handler_telegram' }
+
+
+    App\Service\Notification\FileLoggerNotificationChannel:
+        arguments:
+            - '@monolog.logger'
+        tags:
+            - { name: 'app.handler', key: 'handler_logger' }
+
+    App\Service\Notification\EmailNotificationChannel:
+        arguments:
+            - '@Symfony\Component\Mailer\Mailer'
+            - '@Symfony\Component\Mime\Email'
+        tags:
+            - { name: 'app.handler', key: 'handler_email' }
+
+    Symfony\Component\Mailer\Mailer: ~
+
+    Symfony\Component\Mime\Email: ~
+
+    App\Command\SendNotificationCommand:
+        arguments:
+            -  [!tagged { tag: 'app.handler', index_by: 'key' }]
+
 when@test:
     services:
         test.user_password_hasher:
