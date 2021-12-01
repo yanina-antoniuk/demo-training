@@ -20,8 +20,6 @@ class CsvParser
 
     private string $productsFileName;
 
-    private const FILE_EXT = '.csv';
-
     private Finder $finder;
 
     private ProductFactory $productFactory;
@@ -45,7 +43,7 @@ class CsvParser
         $csvStrings = [];
 
         foreach ($files as $file) {
-            if ($file->getFilename() === $this->productsFileName.self::FILE_EXT) {
+            if ($file->getFilename() === $this->productsFileName) {
                 $csvStrings = explode(\PHP_EOL, $file->getContents());
             }
         }

@@ -9,7 +9,7 @@ parameters:
     app_locales: ar|en|fr|de|es|cs|nl|ru|uk|ro|pt_BR|pl|it|ja|id|ca|sl|hr|zh_CN|bg|tr|lt|bs|sr_Cyrl|sr_Latn
     app.notifications.email_sender: anonymous@example.com
     products_file_dir: '../resources/'
-    products_file_name: 'products'
+    products_file_name: 'products.csv'
     user_file_name: 'users.log'
     user_file_dir: '../var/log/'
     telegram_api_key: '%env(string:TELEGRAM_TOKEN)%'
@@ -48,33 +48,36 @@ services:
     App\EventSubscriber\CommentNotificationSubscriber:
         $sender: '%app.notifications.email_sender%'
 
-    Symfony\Component\Finder\Finder:
+    Symfony\Component\Finder\Finder: ~
 
     App\EventListener\ApiContentTypeListener:
         tags:
             - {name: kernel.event_listener, event: kernel.request, priority: 33}
 
     App\Service\Notification\TelegramNotificationChannel:
+        lazy: true
         arguments:
             - '%telegram_api_key%'
             - '%telegram_send_message_uri%'
             - '%telegram_chat_id%'
         tags:
-            - { name: 'app.handler', key: 'handler_telegram' }
+            - { name: 'notification_channel', key: 'telegram' }
 
 
     App\Service\Notification\FileLoggerNotificationChannel:
+        lazy: true
         arguments:
             - '@monolog.logger'
         tags:
-            - { name: 'app.handler', key: 'handler_logger' }
+            - { name: 'notification_channel', key: 'logger' }
 
     App\Service\Notification\EmailNotificationChannel:
+        lazy: true
         arguments:
             - '@Symfony\Component\Mailer\Mailer'
             - '@Symfony\Component\Mime\Email'
         tags:
-            - { name: 'app.handler', key: 'handler_email' }
+            - { name: 'notification_channel', key: 'email' }
 
     Symfony\Component\Mailer\Mailer: ~
 
@@ -82,7 +85,7 @@ services:
 
     App\Command\SendNotificationCommand:
         arguments:
-            -  [!tagged { tag: 'app.handler', index_by: 'key' }]
+            - !tagged_locator { tag: 'notification_channel', index_by: 'key' }
 
 when@test:
     services:

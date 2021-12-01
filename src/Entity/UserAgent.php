@@ -13,20 +13,11 @@ namespace App\Entity;
 
 class UserAgent
 {
-    /**
-     * @var string
-     */
-    private $ip;
+    private string $ip;
 
-    /**
-     * @var string
-     */
-    private $language;
+    private string $language;
 
-    /**
-     * @var string
-     */
-    private $browser;
+    private string $browser;
 
     public function __construct(string $ip, string $language, string $browser)
     {

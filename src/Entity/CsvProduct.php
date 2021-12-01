@@ -19,51 +19,34 @@ class CsvProduct implements ProductInterface
 
     private string $description;
 
+    private string $type;
+
     public function __construct(string $sku, string $name, string $description)
     {
         $this->sku = $sku;
         $this->name = $name;
         $this->description = $description;
+        $this->type = 'csv';
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getType(): string
     {
-        return ProductInterface::CSV_PRODUCT_TYPE;
+        return $this->type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getSku(): string
     {
         return $this->sku;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function getDescription(): string
     {
         return $this->description;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getProductLink(string $absolutePath): string
-    {
-        return $absolutePath.'/'.$this->sku;
     }
 
     public function serialize(): array

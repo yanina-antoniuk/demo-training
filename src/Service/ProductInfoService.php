@@ -21,7 +21,7 @@ class ProductInfoService
 
         foreach ($products as $product) {
             if ($product instanceof ProductInterface) {
-                $links[] = $product->getProductLink($absolutePath);
+                $links[] = $absolutePath . '/' . $product->getSku();
             }
         }
 

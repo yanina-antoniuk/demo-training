@@ -13,8 +13,6 @@ namespace App\Entity;
 
 interface ProductInterface
 {
-    public const CSV_PRODUCT_TYPE = 'csv';
-
     public function getSku(): string;
 
     public function getName(): string;

@@ -10,21 +10,18 @@ class Notification extends SymfonyNotification
     /**
      * @Assert\Type(type={"alpha", "digit"})
      * @Assert\NotBlank
-     * @var string
      */
     private string $recipient;
 
     /**
      * @Assert\Type(type={"alpha", "digit"})
      * @Assert\NotBlank
-     * @var string
      */
     private string $message;
 
     /**
      * @Assert\Type(type={"alpha", "digit"})
      * @Assert\NotBlank
-     * @var string
      */
     private string $channel;
 

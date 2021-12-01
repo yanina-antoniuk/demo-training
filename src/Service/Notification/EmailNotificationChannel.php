@@ -9,8 +9,6 @@ use Symfony\Component\Mime\Email;
 
 class EmailNotificationChannel implements NotificationChannelInterface
 {
-    private const CHANNEL_NAME = 'email';
-
     private Mailer $mailer;
 
     private Email $email;
@@ -19,11 +17,6 @@ class EmailNotificationChannel implements NotificationChannelInterface
     {
         $this->mailer = $mailer;
         $this->email = $email;
-    }
-
-    public function canSend(Notification $notification): bool
-    {
-        return $notification->getChannel() === self::CHANNEL_NAME;
     }
 
     /**

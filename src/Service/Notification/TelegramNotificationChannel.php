@@ -6,8 +6,6 @@ use App\Entity\Notification;
 
 class TelegramNotificationChannel implements NotificationChannelInterface
 {
-    private const CHANNEL_NAME = 'telegram';
-
     private string $telegramApiKey;
 
     private string $telegramSendMessageUri;
@@ -22,11 +20,6 @@ class TelegramNotificationChannel implements NotificationChannelInterface
         $this->telegramApiKey = $telegramApiKey;
         $this->telegramSendMessageUri = $telegramSendMessageUri;
         $this->telegramChatIdentifier = $telegramChatIdentifier;
-    }
-
-    public function canSend(Notification $notification): bool
-    {
-        return $notification->getChannel() === self::CHANNEL_NAME;
     }
 
     /**

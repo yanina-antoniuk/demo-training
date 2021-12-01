@@ -6,19 +6,16 @@ use App\Entity\Notification;
 
 class SendNotificationCommand
 {
-    private $elements;
+    private $serviceLocator;
 
-    public function __construct($elements)
+    public function __construct($serviceLocator)
     {
-        $this->elements = iterator_to_array($elements[0]);
+        $this->serviceLocator = $serviceLocator;
     }
 
     public function send(Notification $notification): void
     {
-        foreach ($this->elements as $element) {
-            if ($element->canSend($notification)) {
-                $element->send($notification);
-            }
-        }
+        $service = $this->serviceLocator->get($notification->getChannel());
+        $service->send($notification);
     }
 }
