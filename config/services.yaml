@@ -8,6 +8,13 @@ parameters:
     # This parameter defines the codes of the locales (languages) enabled in the application
     app_locales: ar|en|fr|de|es|cs|nl|ru|uk|ro|pt_BR|pl|it|ja|id|ca|sl|hr|zh_CN|bg|tr|lt|bs|sr_Cyrl|sr_Latn
     app.notifications.email_sender: anonymous@example.com
+    products_file_dir: '../resources/'
+    products_file_name: 'products.csv'
+    user_file_name: 'users.log'
+    user_file_dir: '../var/log/'
+    telegram_api_key: '%env(string:TELEGRAM_TOKEN)%'
+    telegram_send_message_uri: 'https://api.telegram.org/bot%s/sendMessage'
+    telegram_chat_id: '%env(string:TELEGRAM_CHAT_ID)%'
 
 services:
     # default configuration for services in *this* file
@@ -18,6 +25,13 @@ services:
             string $locales: '%app_locales%'
             string $defaultLocale: '%locale%'
             string $emailSender: '%app.notifications.email_sender%'
+            string $productsFileDir: '%products_file_dir%'
+            string $productsFileName: '%products_file_name%'
+            string $userFileName: '%user_file_name%'
+            string $userFileDir: '%user_file_dir%'
+            string $telegramApiKey: '%telegram_api_key%'
+            string $telegramSendMessageUri: '%telegram_send_message_uri%'
+            string $telegramChatIdentifier: '%telegram_chat_id%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -33,6 +47,45 @@ services:
     # 'arguments' key and define the arguments just below the service class
     App\EventSubscriber\CommentNotificationSubscriber:
         $sender: '%app.notifications.email_sender%'
+
+    Symfony\Component\Finder\Finder: ~
+
+    App\EventListener\ApiContentTypeListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.request, priority: 33}
+
+    App\Service\Notification\TelegramNotificationChannel:
+        lazy: true
+        arguments:
+            - '%telegram_api_key%'
+            - '%telegram_send_message_uri%'
+            - '%telegram_chat_id%'
+        tags:
+            - { name: 'notification_channel', key: 'telegram' }
+
+
+    App\Service\Notification\FileLoggerNotificationChannel:
+        lazy: true
+        arguments:
+            - '@monolog.logger'
+        tags:
+            - { name: 'notification_channel', key: 'logger' }
+
+    App\Service\Notification\EmailNotificationChannel:
+        lazy: true
+        arguments:
+            - '@Symfony\Component\Mailer\Mailer'
+            - '@Symfony\Component\Mime\Email'
+        tags:
+            - { name: 'notification_channel', key: 'email' }
+
+    Symfony\Component\Mailer\Mailer: ~
+
+    Symfony\Component\Mime\Email: ~
+
+    App\Command\SendNotificationCommand:
+        arguments:
+            - !tagged_locator { tag: 'notification_channel', index_by: 'key' }
 
 when@test:
     services:
