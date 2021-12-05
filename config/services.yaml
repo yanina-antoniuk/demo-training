@@ -15,6 +15,7 @@ parameters:
     telegram_api_key: '%env(string:TELEGRAM_TOKEN)%'
     telegram_send_message_uri: 'https://api.telegram.org/bot%s/sendMessage'
     telegram_chat_id: '%env(string:TELEGRAM_CHAT_ID)%'
+    command_chain_id: '%env(string:COMMAND_CHAIN_ID)%'
 
 services:
     # default configuration for services in *this* file
@@ -32,6 +33,7 @@ services:
             string $telegramApiKey: '%telegram_api_key%'
             string $telegramSendMessageUri: '%telegram_send_message_uri%'
             string $telegramChatIdentifier: '%telegram_chat_id%'
+            string $commandChainId: '%command_chain_id%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
