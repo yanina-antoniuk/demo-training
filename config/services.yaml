@@ -89,6 +89,16 @@ services:
         arguments:
             - !tagged_locator { tag: 'notification_channel', index_by: 'key' }
 
+    app.data.load:
+        class: App\Command\ProductDataLoadCommand
+        arguments:
+            - '@Faker\Factory'
+            - 'app:data:load'
+        tags:
+            - { name: console.command }
+
+    Faker\Factory: ~
+
 when@test:
     services:
         test.user_password_hasher:

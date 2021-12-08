@@ -20,6 +20,4 @@ interface ProductInterface
     public function getDescription(): string;
 
     public function getType(): string;
-
-    public function getProductLink(string $absolutePath): string;
 }
