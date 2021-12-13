@@ -93,6 +93,7 @@ services:
         class: App\Command\ProductDataLoadCommand
         arguments:
             - '@Faker\Factory'
+            - '@Doctrine\ORM\EntityManagerInterface'
             - 'app:data:load'
         tags:
             - { name: console.command }

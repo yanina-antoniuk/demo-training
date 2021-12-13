@@ -14,6 +14,7 @@ namespace App\Controller;
 use App\Command\SendNotificationCommand;
 use App\Factory\NotificationFactory;
 use App\Factory\UserAgentFactory;
+use App\Repository\ProductImageRepository;
 use App\Service\CsvParser;
 use App\Service\Notification\EmailNotificationChannel;
 use App\Service\Notification\FileLoggerNotificationChannel;
@@ -129,5 +130,15 @@ class ProductApiController extends AbstractController
             ['Content-Type: application/json'],
             true
         );
+    }
+
+    /**
+     * @Route("/api/product/images", name="api_products", defaults={"_format": "json"}, methods={"GET"})
+     */
+    public function getProduct(
+        Request $request,
+        ProductImageRepository $imageRepository
+    ): Response {
+       $imageRepository->getImagesWithProductPaginated(1, 2);
     }
 }

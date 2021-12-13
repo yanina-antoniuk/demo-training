@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductImageRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,8 +35,10 @@ class ProductImage
      */
     private $products;
 
-    public function __construct()
+    public function __construct(string $title)
     {
+        $this->title = $title;
+        $this->createdAt = new DateTimeImmutable();
         $this->products = new ArrayCollection();
     }
 
@@ -49,23 +52,9 @@ class ProductImage
         return $this->title;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     /**

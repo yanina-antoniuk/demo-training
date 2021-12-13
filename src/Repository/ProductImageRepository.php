@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Product;
 use App\Entity\ProductImage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,37 +15,32 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ProductImageRepository extends ServiceEntityRepository
 {
+    private ManagerRegistry $registry;
+
     public function __construct(ManagerRegistry $registry)
     {
+        $this->registry = $registry;
         parent::__construct($registry, ProductImage::class);
     }
 
-    // /**
-    //  * @return ProductImage[] Returns an array of ProductImage objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function getImagesWithProductPaginated(int $limit, int $offset)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        //limit - number
+        //offset - page
 
-    /*
-    public function findOneBySomeField($value): ?ProductImage
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->registry->getManager()
+            ->createQueryBuilder()
+            ->select('
+                pi.id imageIdentifier,
+                pi.title imageTitle,
+                p.id productIdentifier,
+                p.title productTitle
+            ')
+            ->from(ProductImage::class, 'pi')
+            ->join(Product::class, 'p')
+            ->setFirstResult(95)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 }

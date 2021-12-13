@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,6 +33,12 @@ class Product
      */
     private $productImage;
 
+    public function __construct(string $title)
+    {
+        $this->title = $title;
+        $this->createdAt = new DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -42,23 +49,9 @@ class Product
         return $this->title;
     }
 
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     public function getProductImage(): ?ProductImage
