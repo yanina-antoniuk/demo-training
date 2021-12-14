@@ -20,6 +20,7 @@ use App\Service\Notification\EmailNotificationChannel;
 use App\Service\Notification\FileLoggerNotificationChannel;
 use App\Service\Notification\TelegramNotificationChannel;
 use App\Service\ProductInfoService;
+use App\Service\SimplePaginator;
 use App\Service\UserAgentInfoVisitLogger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -137,8 +138,21 @@ class ProductApiController extends AbstractController
      */
     public function getProduct(
         Request $request,
-        ProductImageRepository $imageRepository
+        ProductImageRepository $imageRepository,
+        SimplePaginator $paginator
     ): Response {
-       $imageRepository->getImagesWithProductPaginated(1, 2);
+        $paginationData = $request->query->all();
+        $result = $imageRepository->getImagesWithProductPaginated();
+
+        return new JsonResponse(
+            $paginator->paginate(
+                $result,
+                $paginationData['limit'],
+                $paginationData['page']
+            ),
+            Response::HTTP_OK,
+            ['Content-Type: application/json'],
+            false
+        );
     }
 }

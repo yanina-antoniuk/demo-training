@@ -23,11 +23,8 @@ class ProductImageRepository extends ServiceEntityRepository
         parent::__construct($registry, ProductImage::class);
     }
 
-    public function getImagesWithProductPaginated(int $limit, int $offset)
+    public function getImagesWithProductPaginated()
     {
-        //limit - number
-        //offset - page
-
         return $this->registry->getManager()
             ->createQueryBuilder()
             ->select('
@@ -38,8 +35,6 @@ class ProductImageRepository extends ServiceEntityRepository
             ')
             ->from(ProductImage::class, 'pi')
             ->join(Product::class, 'p')
-            ->setFirstResult(95)
-            ->setMaxResults(1)
             ->getQuery()
             ->getResult();
     }
