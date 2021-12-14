@@ -1,7 +1,15 @@
 <?php
 
-namespace App\Command;
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
+namespace App\Command;
 
 use App\Entity\Product;
 use App\Entity\ProductImage;
@@ -33,7 +41,7 @@ class ProductDataLoadCommand extends Command
         $productImages = $this->generateItems(100);
         $productImagesArray = [];
 
-        foreach($productImages as $title){
+        foreach ($productImages as $title) {
             $productImage = new ProductImage($title);
             $productImagesArray[] = $productImage;
             $this->entityManager->persist($productImage);
@@ -41,23 +49,24 @@ class ProductDataLoadCommand extends Command
 
         $this->entityManager->flush();
 
-        foreach($products as $title){
+        foreach ($products as $title) {
             $product = new Product($title);
-            $product->setProductImage($productImagesArray[rand(0, count($productImagesArray) - 1)]);
+            $product->setProductImage($productImagesArray[rand(0, \count($productImagesArray) - 1)]);
             $this->entityManager->persist($product);
         }
 
         $this->entityManager->flush();
+
         return Command::SUCCESS;
     }
 
-    private function generateItems(int $amount) : ?array
+    private function generateItems(int $amount): ?array
     {
         $generator = $this->faker->create();
 
         $products = [];
 
-        for ($i = 0; $i < $amount; $i++) {
+        for ($i = 0; $i < $amount; ++$i) {
             $products[] = $generator->word;
         }
 

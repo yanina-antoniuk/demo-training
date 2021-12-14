@@ -15,7 +15,7 @@ class SimplePaginator
 {
     public function paginate(array $data, int $limit, int $page): array
     {
-        $totalCount = count($data);
+        $totalCount = \count($data);
 
         if ($limit > 0 && $limit <= $totalCount) {
             $totalPages = $totalCount / $limit;
