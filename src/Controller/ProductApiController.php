@@ -15,9 +15,6 @@ use App\Command\SendNotificationCommand;
 use App\Factory\NotificationFactory;
 use App\Factory\UserAgentFactory;
 use App\Service\CsvParser;
-use App\Service\Notification\EmailNotificationChannel;
-use App\Service\Notification\FileLoggerNotificationChannel;
-use App\Service\Notification\TelegramNotificationChannel;
 use App\Service\ProductInfoService;
 use App\Service\UserAgentInfoVisitLogger;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,7 +34,6 @@ class ProductApiController extends AbstractController
         CsvParser $csvParser,
         Request $request
     ): Response {
-
         $parsedProducts = $csvParser->getParsedProducts();
 
         $absolutePath = rtrim($request->server->get('SYMFONY_DEFAULT_ROUTE_URL'), '/')

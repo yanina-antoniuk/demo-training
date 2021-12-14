@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\EventListener;
 
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -14,8 +23,8 @@ final class ApiContentTypeListener
 
         if (
             !empty($matches)
-            && $event->getRequest()->server->get('HTTP_CONTENT_TYPE') !== 'application/json'
-            && !strpos($uri, 'config')
+            && 'application/json' !== $event->getRequest()->server->get('HTTP_CONTENT_TYPE')
+            && !mb_strpos($uri, 'config')
         ) {
             throw new UnsupportedMediaTypeHttpException();
         }

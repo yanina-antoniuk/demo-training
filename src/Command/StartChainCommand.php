@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace App\Command;
 
 use Psr\Log\LoggerInterface;
@@ -40,7 +49,7 @@ class StartChainCommand extends Command
             LogLevel::INFO,
             $this->getDescription(),
             [
-                $this->getName()
+                $this->getName(),
             ]
         );
         $firstCommandName = 'chain:first';
@@ -50,7 +59,7 @@ class StartChainCommand extends Command
             self::CHAIN_INFO,
             [
                 $firstCommandName,
-                $this->getName()
+                $this->getName(),
             ]
         );
 
@@ -58,7 +67,7 @@ class StartChainCommand extends Command
             LogLevel::INFO,
             self::EXECUTE_INFO,
             [
-                $this->getName()
+                $this->getName(),
             ]
         );
 
@@ -71,7 +80,7 @@ class StartChainCommand extends Command
 
         $arguments = [
             'command' => $firstCommandName,
-            'chainId' => $this->commandChainId
+            'chainId' => $this->commandChainId,
         ];
         $subCommandInput = new ArrayInput($arguments);
 
