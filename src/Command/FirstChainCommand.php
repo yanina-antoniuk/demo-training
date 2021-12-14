@@ -3,8 +3,8 @@
 namespace App\Command;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -34,13 +34,15 @@ class FirstChainCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getArgument('chainId') !== $this->commandChainId) {
-            throw new CommandNotFoundException(sprintf(self::EXCEPTION_MESSAGE, $this->getName()));
+            $this->logger->log(LogLevel::ERROR, self::EXCEPTION_MESSAGE, [$this->getName()]);
+
+            return Command::INVALID;
         }
         $message = "Hello from Bar!\n";
-        $this->logger->info(sprintf(StartChainCommand::EXECUTE_INFO, $this->getName()));
+        $this->logger->log(LogLevel::INFO, StartChainCommand::EXECUTE_INFO, [$this->getName()]);
         $output->write($message);
-        $this->logger->info($message);
-        $this->logger->info('Execution of foo:hello chain completed!');
+        $this->logger->log(LogLevel::INFO, $message);
+        $this->logger->log(LogLevel::INFO, 'Execution of foo:hello chain completed!');
 
         return Command::SUCCESS;
     }

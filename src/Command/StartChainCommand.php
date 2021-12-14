@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,40 +31,41 @@ class StartChainCommand extends Command
         parent::__construct($name);
     }
 
-    public function configure()
-    {
-        parent::configure();
-        $this->setDescription(
-            '%s is a master command of a command chain that has registered member commands'
-        );
-    }
-
     /**
      * @throws \Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->logger->info(sprintf(
+        $this->logger->log(
+            LogLevel::INFO,
             $this->getDescription(),
-            $this->getName()
-        ));
+            [
+                $this->getName()
+            ]
+        );
         $firstCommandName = 'chain:first';
 
-        $this->logger->info(sprintf(
+        $this->logger->log(
+            LogLevel::INFO,
             self::CHAIN_INFO,
-            $firstCommandName,
-            $this->getName()
-        ));
+            [
+                $firstCommandName,
+                $this->getName()
+            ]
+        );
 
-        $this->logger->info(sprintf(
+        $this->logger->log(
+            LogLevel::INFO,
             self::EXECUTE_INFO,
-            $this->getName()
-        ));
+            [
+                $this->getName()
+            ]
+        );
 
         $message = "Hello from Foo!\n";
         $output->write($message);
 
-        $this->logger->info($message);
+        $this->logger->log(LogLevel::INFO, $message);
 
         $command = $this->getApplication()->find($firstCommandName);
 
